@@ -1,11 +1,16 @@
-print("Started")
-
 from serial import Serial
 import sys
-import time
+from time import sleep 
 
 port = Serial("/dev/ttyUSB0", baudrate=9600, timeout=3.0)
-port.write(":0102520011bmsD1~") #":0102520011bmsD1~"
+
+vol_up = "NEC:551502015$32%"
+vol_down = "NEC:551534655$32%"
+power = "NEC:551489775$32%"
+play = "NEC:551509410$32%"
+ok = "NEC:551494365$32%"
+source = "NEC:551538735$32%"
+left = "NEC:551542815$32%"
 
 def read_in():
     lines = sys.stdin.readlines()
@@ -17,30 +22,11 @@ def write_out(cmd):
     port.write(cmd) #":0102520011bmsD1~"
 
 def main():
-    while True:
-        lines = ":0102520011bmsD1~"
-        
-        if lines != '':
-            write_out(lines)
+    #port.write(play)
+    sleep(0.1)
+    port.write(power)
 
-        rcv = port.read(300)
-        sys.stdout.write(repr(rcv))
-        #sys.stdout.flush()
-        
-        lines = ":000100000E09~"#read_in()
-        
-        if lines != '':
-            write_out(lines)
-
-        rcv = port.read(300)
-        sys.stdout.write(repr(rcv))
-        sys.stdout.flush()
-        time.sleep(3)
-        #sys.stdout.write("\n")
     
-
-
-
 #start process
 if __name__ == '__main__':
     main()
